@@ -64,7 +64,7 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background font-golos flex flex-col" style={{ backgroundImage: "radial-gradient(ellipse at 80% 0%, rgba(255,138,0,0.06) 0%, transparent 50%)" }}>
       {/* Header */}
-      <header className="border-b border-border/60 px-6 py-4 flex items-center justify-between sticky top-0 z-50" style={{ background: "rgba(15,17,22,0.85)", backdropFilter: "blur(12px)" }}>
+      <header className="border-b border-border/60 px-6 py-4 flex items-center justify-between sticky top-0 z-50" style={{ background: "rgba(245,247,250,0.88)", backdropFilter: "blur(12px)" }}>
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg btn-orange flex items-center justify-center">
             <Icon name="User" size={16} />
@@ -86,7 +86,7 @@ export default function Index() {
             </button>
 
             {showNotifs && (
-              <div className="absolute right-0 top-11 w-80 rounded-xl border border-border/60 shadow-2xl z-50 overflow-hidden animate-scale-in" style={{ background: "hsl(220 14% 11%)" }}>
+              <div className="absolute right-0 top-11 w-80 rounded-xl border border-border shadow-xl z-50 overflow-hidden animate-scale-in" style={{ background: "hsl(0 0% 100%)" }}>
                 <div className="flex items-center justify-between px-4 py-3 border-b border-border/40">
                   <span className="font-semibold text-sm">Уведомления</span>
                   {unread > 0 && (
@@ -133,7 +133,7 @@ export default function Index() {
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
                 className={`nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-left ${activeTab === item.id ? "active" : ""}`}
-                style={{ color: activeTab === item.id ? "hsl(28 100% 54%)" : "hsl(220 10% 65%)" }}
+                style={{ color: activeTab === item.id ? "hsl(28 100% 54%)" : "hsl(220 20% 40%)" }}
               >
                 <Icon name={item.icon} size={17} />
                 {item.label}
@@ -142,7 +142,7 @@ export default function Index() {
 
             <div className="mt-6 rounded-xl p-3" style={{ background: "rgba(255,138,0,0.07)", border: "1px solid rgba(255,138,0,0.15)" }}>
               <p className="text-xs font-medium mb-1" style={{ color: "hsl(28 100% 54%)" }}>Профессионал</p>
-              <div className="w-full h-1.5 rounded-full mb-1" style={{ background: "hsl(220 12% 18%)" }}>
+              <div className="w-full h-1.5 rounded-full mb-1" style={{ background: "hsl(220 15% 88%)" }}>
                 <div className="progress-bar-orange h-1.5" style={{ width: `${progress}%` }} />
               </div>
               <p className="text-xs" style={{ color: "hsl(220 10% 50%)" }}>Осталось {daysLeft} дней</p>
@@ -183,7 +183,7 @@ export default function Index() {
                 <p className="text-sm mt-1" style={{ color: "hsl(220 10% 50%)" }}>Управляйте личной информацией и безопасностью</p>
               </div>
 
-              <div className="rounded-2xl p-5" style={{ background: "hsl(220 14% 11%)", border: "1px solid hsl(220 12% 18%)" }}>
+              <div className="rounded-2xl p-5" style={{ background: "hsl(0 0% 100%)", border: "1px solid hsl(220 15% 88%)", boxShadow: "0 1px 8px rgba(0,0,0,0.05)" }}>
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-bold shrink-0" style={{ background: "linear-gradient(135deg, hsl(28 100% 54%), hsl(22 100% 42%))", color: "white" }}>
                     {profile.name.split(" ").map(w => w[0]).join("").slice(0, 2)}
@@ -272,7 +272,7 @@ export default function Index() {
                 <p className="text-sm mt-1" style={{ color: "hsl(220 10% 50%)" }}>Управляйте тарифом и настройками оплаты</p>
               </div>
 
-              <div className="rounded-2xl p-5 animate-pulse-orange" style={{ background: "hsl(220 14% 11%)", border: "1px solid rgba(255,138,0,0.25)" }}>
+              <div className="rounded-2xl p-5 animate-pulse-orange" style={{ background: "hsl(0 0% 100%)", border: "1px solid rgba(255,138,0,0.3)", boxShadow: "0 1px 8px rgba(0,0,0,0.05)" }}>
                 <div className="flex items-start justify-between mb-4 flex-wrap gap-3">
                   <div>
                     <div className="flex items-center gap-2 mb-1">
@@ -295,14 +295,14 @@ export default function Index() {
                     <span>Использовано</span>
                     <span>{totalDays - daysLeft} из {totalDays} дней</span>
                   </div>
-                  <div className="w-full h-2 rounded-full" style={{ background: "hsl(220 12% 18%)" }}>
+                  <div className="w-full h-2 rounded-full" style={{ background: "hsl(220 15% 90%)" }}>
                     <div className="progress-bar-orange h-2" style={{ width: `${progress}%` }} />
                   </div>
                 </div>
 
                 <div className="flex items-start gap-2.5 rounded-lg px-3.5 py-2.5 mb-4" style={{ background: "rgba(255,138,0,0.07)", border: "1px solid rgba(255,138,0,0.15)" }}>
                   <Icon name="Bell" size={14} className="mt-0.5 shrink-0" style={{ color: "hsl(28 100% 54%)" }} />
-                  <p className="text-xs leading-relaxed" style={{ color: "hsl(40 20% 75%)" }}>
+                  <p className="text-xs leading-relaxed" style={{ color: "hsl(220 15% 35%)" }}>
                     Уведомление о продлении отправлено на <strong>{profile.email}</strong>. Автопродление включено.
                   </p>
                 </div>
@@ -312,22 +312,22 @@ export default function Index() {
                     <Icon name="RefreshCw" size={14} />
                     Продлить подписку
                   </button>
-                  <button className="px-4 py-2.5 rounded-lg text-sm font-medium transition-all hover:bg-white/5 flex items-center gap-1.5" style={{ border: "1px solid hsl(220 12% 22%)", color: "hsl(40 20% 85%)" }}>
+                  <button className="px-4 py-2.5 rounded-lg text-sm font-medium transition-all hover:bg-black/5 flex items-center gap-1.5" style={{ border: "1px solid hsl(220 15% 82%)", color: "hsl(220 25% 25%)" }}>
                     <Icon name="ArrowUpDown" size={14} />
                     Сменить тариф
                   </button>
-                  <button className="px-4 py-2.5 rounded-lg text-sm font-medium transition-all hover:bg-white/5 flex items-center gap-1.5" style={{ border: "1px solid hsl(220 12% 22%)", color: "hsl(220 10% 55%)" }}>
+                  <button className="px-4 py-2.5 rounded-lg text-sm font-medium transition-all hover:bg-black/5 flex items-center gap-1.5" style={{ border: "1px solid hsl(220 15% 82%)", color: "hsl(220 12% 50%)" }}>
                     <Icon name="Settings" size={14} />
                     Управление
                   </button>
                 </div>
               </div>
 
-              <div className="rounded-2xl p-5" style={{ background: "hsl(220 14% 11%)", border: "1px solid hsl(220 12% 18%)" }}>
-                <h3 className="font-semibold mb-4 text-sm uppercase tracking-wider" style={{ color: "hsl(220 10% 45%)" }}>Возможности тарифа</h3>
+              <div className="rounded-2xl p-5" style={{ background: "hsl(0 0% 100%)", border: "1px solid hsl(220 15% 88%)", boxShadow: "0 1px 8px rgba(0,0,0,0.05)" }}>
+                <h3 className="font-semibold mb-4 text-sm uppercase tracking-wider" style={{ color: "hsl(220 12% 55%)" }}>Возможности тарифа</h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {FEATURES.map((f, i) => (
-                    <div key={i} className="flex items-center gap-2.5 p-3 rounded-xl transition-all hover:bg-white/3" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}>
+                    <div key={i} className="flex items-center gap-2.5 p-3 rounded-xl transition-all hover:bg-orange-50/60" style={{ background: "hsl(220 20% 98%)", border: "1px solid hsl(220 15% 91%)" }}>
                       <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: "rgba(255,138,0,0.1)" }}>
                         <Icon name={f.icon} size={15} style={{ color: "hsl(28 100% 54%)" }} />
                       </div>
@@ -347,7 +347,7 @@ export default function Index() {
                 <p className="text-sm mt-1" style={{ color: "hsl(220 10% 50%)" }}>Мы отвечаем в течение 2–4 часов в рабочее время</p>
               </div>
 
-              <div className="rounded-2xl p-5" style={{ background: "hsl(220 14% 11%)", border: "1px solid hsl(220 12% 18%)" }}>
+              <div className="rounded-2xl p-5" style={{ background: "hsl(0 0% 100%)", border: "1px solid hsl(220 15% 88%)", boxShadow: "0 1px 8px rgba(0,0,0,0.05)" }}>
                 <div className="flex items-center gap-2 mb-4">
                   <Icon name="MessageSquare" size={18} style={{ color: "hsl(28 100% 54%)" }} />
                   <h3 className="font-semibold">Написать сообщение</h3>
@@ -379,7 +379,7 @@ export default function Index() {
                   { icon: "MessageCircle", label: "Telegram", desc: "@support_team", color: "#2AABEE" },
                   { icon: "Mail", label: "Email", desc: "support@example.com", color: "hsl(28 100% 54%)" },
                 ].map((c, i) => (
-                  <div key={i} className="rounded-xl p-4 flex items-center gap-3 cursor-pointer transition-all hover:bg-white/4" style={{ background: "hsl(220 14% 11%)", border: "1px solid hsl(220 12% 18%)" }}>
+                  <div key={i} className="rounded-xl p-4 flex items-center gap-3 cursor-pointer transition-all hover:bg-gray-50" style={{ background: "hsl(0 0% 100%)", border: "1px solid hsl(220 15% 88%)", boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${c.color}18` }}>
                       <Icon name={c.icon} size={18} style={{ color: c.color }} />
                     </div>
@@ -387,12 +387,12 @@ export default function Index() {
                       <p className="font-medium text-sm">{c.label}</p>
                       <p className="text-xs" style={{ color: "hsl(220 10% 50%)" }}>{c.desc}</p>
                     </div>
-                    <Icon name="ChevronRight" size={14} className="ml-auto" style={{ color: "hsl(220 10% 40%)" }} />
+                    <Icon name="ChevronRight" size={14} className="ml-auto" style={{ color: "hsl(220 15% 70%)" }} />
                   </div>
                 ))}
               </div>
 
-              <div className="rounded-2xl p-5" style={{ background: "hsl(220 14% 11%)", border: "1px solid hsl(220 12% 18%)" }}>
+              <div className="rounded-2xl p-5" style={{ background: "hsl(0 0% 100%)", border: "1px solid hsl(220 15% 88%)", boxShadow: "0 1px 8px rgba(0,0,0,0.05)" }}>
                 <div className="flex items-center gap-2 mb-4">
                   <Icon name="HelpCircle" size={18} style={{ color: "hsl(28 100% 54%)" }} />
                   <h3 className="font-semibold">Часто задаваемые вопросы</h3>
