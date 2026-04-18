@@ -5,18 +5,18 @@ type TabType = "profile" | "subscription" | "support";
 type ProfileTabType = "info" | "password";
 
 const NOTIFICATIONS = [
-  { id: 1, text: "Ваша подписка истекает через 7 дней. Продлите, чтобы не потерять доступ.", time: "Сегодня, 10:23", read: false, type: "warning" },
+  { id: 1, text: "Подписка истекает через 7 дней. Продлите, чтобы не потерять доступ.", time: "Сегодня, 10:23", read: false, type: "warning" },
   { id: 2, text: "Тариф «Профессионал» успешно активирован.", time: "15 апр, 14:05", read: true, type: "success" },
   { id: 3, text: "Платёж на сумму 2 990 ₽ прошёл успешно.", time: "1 апр, 09:11", read: true, type: "success" },
 ];
 
 const FEATURES = [
-  { icon: "Zap", label: "До 50 проектов" },
-  { icon: "Globe", label: "Свой домен" },
-  { icon: "Shield", label: "SSL-сертификат" },
-  { icon: "Database", label: "10 ГБ хранилища" },
-  { icon: "Users", label: "3 участника" },
-  { icon: "BarChart2", label: "Аналитика" },
+  { icon: "Zap", label: "До 50 проектов", desc: "Без ограничений по типу" },
+  { icon: "Globe", label: "Свой домен", desc: "Любой домен бесплатно" },
+  { icon: "Shield", label: "SSL-сертификат", desc: "Автовыпуск и продление" },
+  { icon: "Database", label: "10 ГБ хранилища", desc: "Файлы и медиа" },
+  { icon: "Users", label: "3 участника", desc: "Совместная работа" },
+  { icon: "BarChart2", label: "Аналитика", desc: "Полная статистика" },
 ];
 
 const FAQS = [
@@ -24,6 +24,12 @@ const FAQS = [
   { q: "Можно ли сменить тариф в середине периода?", a: "Да, при смене тарифа вы доплачиваете разницу за оставшееся время." },
   { q: "Как отменить автопродление?", a: "Перейдите в «Управление подпиской» → «Отменить автопродление»." },
   { q: "Сколько времени занимает ответ поддержки?", a: "Мы отвечаем в течение 2–4 рабочих часов по будням." },
+];
+
+const NAV = [
+  { id: "profile" as TabType, icon: "User", label: "Мои данные" },
+  { id: "subscription" as TabType, icon: "CreditCard", label: "Подписки" },
+  { id: "support" as TabType, icon: "LifeBuoy", label: "Поддержка" },
 ];
 
 export default function Index() {
@@ -37,6 +43,7 @@ export default function Index() {
   const [showPasswordSuccess, setShowPasswordSuccess] = useState(false);
   const [profile, setProfile] = useState({ name: "Александр Иванов", email: "alex@example.com", phone: "+7 (999) 123-45-67" });
   const [editProfile, setEditProfile] = useState(profile);
+  const [savedProfile, setSavedProfile] = useState(false);
 
   const unread = notifs.filter(n => !n.read).length;
   const daysLeft = 7;
@@ -54,6 +61,8 @@ export default function Index() {
 
   const handleSaveProfile = () => {
     setProfile(editProfile);
+    setSavedProfile(true);
+    setTimeout(() => setSavedProfile(false), 3000);
   };
 
   const handleSavePassword = () => {
@@ -62,48 +71,59 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-background font-golos flex flex-col" style={{ backgroundImage: "radial-gradient(ellipse at 80% 0%, rgba(255,138,0,0.06) 0%, transparent 50%)" }}>
+    <div className="min-h-screen lk-bg font-golos">
+      {/* Decorative blobs */}
+      <div className="lk-blob lk-blob-1" />
+      <div className="lk-blob lk-blob-2" />
+
       {/* Header */}
-      <header className="border-b border-border/60 px-6 py-4 flex items-center justify-between sticky top-0 z-50" style={{ background: "rgba(245,247,250,0.88)", backdropFilter: "blur(12px)" }}>
+      <header className="lk-header">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg btn-orange flex items-center justify-center">
-            <Icon name="User" size={16} />
+          <div className="lk-logo">
+            <Icon name="Sparkles" size={15} />
           </div>
-          <span className="font-semibold text-lg tracking-tight">Личный кабинет</span>
+          <span className="font-semibold text-base tracking-tight text-gray-900">Личный кабинет</span>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          {/* Bell */}
           <div className="relative">
             <button
               onClick={() => setShowNotifs(!showNotifs)}
-              className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 hover:bg-white/5"
-              style={{ color: unread > 0 ? "hsl(28 100% 54%)" : "hsl(220 10% 55%)" }}
+              className="lk-icon-btn"
             >
-              <Icon name="Bell" size={20} />
-              {unread > 0 && (
-                <span className="notification-dot absolute top-1.5 right-1.5 w-2 h-2 rounded-full" style={{ background: "hsl(28 100% 54%)" }} />
-              )}
+              <Icon name="Bell" size={18} style={{ color: unread > 0 ? "hsl(28 100% 54%)" : "#9ca3af" }} />
+              {unread > 0 && <span className="lk-notif-dot" />}
             </button>
 
             {showNotifs && (
-              <div className="absolute right-0 top-11 w-80 rounded-xl border border-border shadow-xl z-50 overflow-hidden animate-scale-in" style={{ background: "hsl(0 0% 100%)" }}>
-                <div className="flex items-center justify-between px-4 py-3 border-b border-border/40">
-                  <span className="font-semibold text-sm">Уведомления</span>
+              <div className="lk-notif-panel animate-scale-in">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-sm text-gray-900">Уведомления</span>
+                    {unread > 0 && (
+                      <span className="lk-badge-orange">{unread}</span>
+                    )}
+                  </div>
                   {unread > 0 && (
-                    <button onClick={markAllRead} className="text-xs transition-colors" style={{ color: "hsl(28 100% 54%)" }}>
-                      Отметить все
+                    <button onClick={markAllRead} className="text-xs font-medium lk-link">
+                      Прочитать все
                     </button>
                   )}
                 </div>
-                <div className="max-h-72 overflow-y-auto">
+                <div className="max-h-72 overflow-y-auto divide-y divide-gray-50">
                   {notifs.map(n => (
-                    <div key={n.id} className={`px-4 py-3 border-b border-border/20 transition-colors ${n.read ? "opacity-60" : ""}`} style={{ borderLeft: n.read ? "3px solid transparent" : "3px solid hsl(28 100% 54%)" }}>
-                      <div className="flex gap-2">
-                        <Icon name={n.type === "warning" ? "AlertTriangle" : "CheckCircle"} size={14} className="mt-0.5 shrink-0" style={{ color: n.type === "warning" ? "hsl(28 100% 54%)" : "#4ade80" }} />
-                        <div>
-                          <p className="text-sm leading-snug">{n.text}</p>
-                          <p className="text-xs mt-1" style={{ color: "hsl(220 10% 50%)" }}>{n.time}</p>
-                        </div>
+                    <div key={n.id} className={`px-4 py-3.5 flex gap-3 transition-colors hover:bg-gray-50/70 ${n.read ? "opacity-50" : ""}`}>
+                      <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${n.type === "warning" ? "bg-orange-50" : "bg-green-50"}`}>
+                        <Icon
+                          name={n.type === "warning" ? "AlertCircle" : "CheckCircle2"}
+                          size={13}
+                          style={{ color: n.type === "warning" ? "hsl(28 100% 54%)" : "#22c55e" }}
+                        />
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-700 leading-snug">{n.text}</p>
+                        <p className="text-xs text-gray-400 mt-1">{n.time}</p>
                       </div>
                     </div>
                   ))}
@@ -112,226 +132,293 @@ export default function Index() {
             )}
           </div>
 
-          <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold" style={{ background: "linear-gradient(135deg, hsl(28 100% 54%), hsl(22 100% 42%))", color: "white" }}>
-            АИ
+          {/* Avatar */}
+          <div className="lk-avatar">
+            {profile.name.split(" ").map(w => w[0]).join("").slice(0, 2)}
           </div>
         </div>
       </header>
 
       {showNotifs && <div className="fixed inset-0 z-40" onClick={() => setShowNotifs(false)} />}
 
-      <div className="flex flex-1 max-w-5xl mx-auto w-full px-4 py-8 gap-6">
+      <div className="max-w-5xl mx-auto px-4 pt-6 pb-16 flex gap-6">
+
         {/* Sidebar */}
-        <aside className="w-56 shrink-0 hidden md:block">
-          <nav className="space-y-1 sticky top-24">
-            {([
-              { id: "profile", icon: "User", label: "Мои данные" },
-              { id: "subscription", icon: "CreditCard", label: "Мои подписки" },
-              { id: "support", icon: "MessageCircle", label: "Поддержка" },
-            ] as { id: TabType; icon: string; label: string }[]).map(item => (
+        <aside className="w-52 shrink-0 hidden md:flex flex-col gap-2">
+          {/* User mini card */}
+          <div className="lk-user-card">
+            <div className="lk-avatar-lg">
+              {profile.name.split(" ").map(w => w[0]).join("").slice(0, 2)}
+            </div>
+            <p className="font-semibold text-sm text-gray-900 truncate">{profile.name}</p>
+            <p className="text-xs text-gray-400 truncate">{profile.email}</p>
+          </div>
+
+          {/* Nav */}
+          <nav className="lk-card p-1.5 flex flex-col gap-0.5">
+            {NAV.map(item => (
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
-                className={`nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-left ${activeTab === item.id ? "active" : ""}`}
-                style={{ color: activeTab === item.id ? "hsl(28 100% 54%)" : "hsl(220 20% 40%)" }}
+                className={`lk-nav-btn ${activeTab === item.id ? "lk-nav-btn--active" : ""}`}
               >
-                <Icon name={item.icon} size={17} />
+                <Icon name={item.icon} size={16} />
                 {item.label}
               </button>
             ))}
-
-            <div className="mt-6 rounded-xl p-3" style={{ background: "rgba(255,138,0,0.07)", border: "1px solid rgba(255,138,0,0.15)" }}>
-              <p className="text-xs font-medium mb-1" style={{ color: "hsl(28 100% 54%)" }}>Профессионал</p>
-              <div className="w-full h-1.5 rounded-full mb-1" style={{ background: "hsl(220 15% 88%)" }}>
-                <div className="progress-bar-orange h-1.5" style={{ width: `${progress}%` }} />
-              </div>
-              <p className="text-xs" style={{ color: "hsl(220 10% 50%)" }}>Осталось {daysLeft} дней</p>
-            </div>
           </nav>
+
+          {/* Subscription pill */}
+          <div className="lk-sub-pill">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-semibold text-orange-500">Профессионал</span>
+              <span className="text-xs font-bold text-gray-900">{daysLeft}д</span>
+            </div>
+            <div className="lk-progress-track">
+              <div className="lk-progress-fill" style={{ width: `${progress}%` }} />
+            </div>
+            <p className="text-xs text-gray-400 mt-1.5">до 25 апреля 2026</p>
+          </div>
         </aside>
 
-        {/* Mobile tabs */}
-        <div className="md:hidden flex gap-1 mb-4 w-full">
-          {([
-            { id: "profile", icon: "User", label: "Данные" },
-            { id: "subscription", icon: "CreditCard", label: "Подписка" },
-            { id: "support", icon: "MessageCircle", label: "Поддержка" },
-          ] as { id: TabType; icon: string; label: string }[]).map(item => (
+        {/* Mobile nav */}
+        <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 lk-mobile-nav">
+          {NAV.map(item => (
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`flex-1 flex flex-col items-center gap-1 py-2 rounded-lg text-xs font-medium transition-all`}
-              style={{
-                background: activeTab === item.id ? "rgba(255,138,0,0.1)" : "transparent",
-                color: activeTab === item.id ? "hsl(28 100% 54%)" : "hsl(220 10% 55%)"
-              }}
+              className={`lk-mobile-nav-btn ${activeTab === item.id ? "lk-mobile-nav-btn--active" : ""}`}
             >
-              <Icon name={item.icon} size={16} />
-              {item.label}
+              <Icon name={item.icon} size={18} />
+              <span>{item.label}</span>
             </button>
           ))}
         </div>
 
-        {/* Main content */}
-        <main className="flex-1 min-w-0 animate-fade-in">
+        {/* Content */}
+        <main className="flex-1 min-w-0 space-y-4 pb-20 md:pb-0" key={activeTab}>
 
-          {/* === PROFILE === */}
+          {/* ── PROFILE ── */}
           {activeTab === "profile" && (
-            <div className="space-y-5">
-              <div>
-                <h1 className="text-2xl font-bold">Мои данные</h1>
-                <p className="text-sm mt-1" style={{ color: "hsl(220 10% 50%)" }}>Управляйте личной информацией и безопасностью</p>
+            <div className="animate-fade-in space-y-4">
+              <div className="lk-page-header">
+                <div>
+                  <h1 className="lk-h1">Мои данные</h1>
+                  <p className="lk-sub">Личная информация и безопасность аккаунта</p>
+                </div>
               </div>
 
-              <div className="rounded-2xl p-5" style={{ background: "hsl(0 0% 100%)", border: "1px solid hsl(220 15% 88%)", boxShadow: "0 1px 8px rgba(0,0,0,0.05)" }}>
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-bold shrink-0" style={{ background: "linear-gradient(135deg, hsl(28 100% 54%), hsl(22 100% 42%))", color: "white" }}>
-                    {profile.name.split(" ").map(w => w[0]).join("").slice(0, 2)}
-                  </div>
-                  <div>
-                    <p className="font-semibold text-lg">{profile.name}</p>
-                    <p className="text-sm" style={{ color: "hsl(220 10% 50%)" }}>{profile.email}</p>
+              <div className="lk-card overflow-hidden">
+                {/* Top banner */}
+                <div className="lk-card-banner">
+                  <div className="flex items-center gap-4">
+                    <div className="lk-avatar-xl">
+                      {profile.name.split(" ").map(w => w[0]).join("").slice(0, 2)}
+                    </div>
+                    <div>
+                      <p className="font-bold text-white text-lg leading-tight">{profile.name}</p>
+                      <p className="text-orange-200 text-sm">{profile.email}</p>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex gap-0 border-b border-border/40 mb-5">
-                  {([{ id: "info", label: "Личные данные" }, { id: "password", label: "Смена пароля" }] as { id: ProfileTabType; label: string }[]).map(t => (
+                {/* Tabs */}
+                <div className="flex border-b border-gray-100 px-6">
+                  {([{ id: "info" as ProfileTabType, label: "Личные данные", icon: "User" }, { id: "password" as ProfileTabType, label: "Смена пароля", icon: "Lock" }]).map(t => (
                     <button
                       key={t.id}
                       onClick={() => setProfileTab(t.id)}
-                      className={`px-4 py-2 text-sm font-medium transition-all -mb-px ${profileTab === t.id ? "tab-active" : ""}`}
-                      style={{ color: profileTab === t.id ? "hsl(28 100% 54%)" : "hsl(220 10% 55%)" }}
+                      className={`lk-tab ${profileTab === t.id ? "lk-tab--active" : ""}`}
                     >
+                      <Icon name={t.icon} size={14} />
                       {t.label}
                     </button>
                   ))}
                 </div>
 
-                {profileTab === "info" && (
-                  <div className="space-y-4 animate-fade-in">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-xs font-medium mb-1.5" style={{ color: "hsl(220 10% 55%)" }}>ФИО</label>
-                        <input className="input-dark" value={editProfile.name} onChange={e => setEditProfile({ ...editProfile, name: e.target.value })} placeholder="Иванов Иван Иванович" />
+                <div className="p-6">
+                  {profileTab === "info" && (
+                    <div className="space-y-4 animate-fade-in">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="lk-label">ФИО</label>
+                          <input className="lk-input" value={editProfile.name} onChange={e => setEditProfile({ ...editProfile, name: e.target.value })} placeholder="Иванов Иван Иванович" />
+                        </div>
+                        <div>
+                          <label className="lk-label">Телефон</label>
+                          <input className="lk-input" value={editProfile.phone} onChange={e => setEditProfile({ ...editProfile, phone: e.target.value })} placeholder="+7 (999) 000-00-00" />
+                        </div>
                       </div>
                       <div>
-                        <label className="block text-xs font-medium mb-1.5" style={{ color: "hsl(220 10% 55%)" }}>Телефон</label>
-                        <input className="input-dark" value={editProfile.phone} onChange={e => setEditProfile({ ...editProfile, phone: e.target.value })} placeholder="+7 (999) 000-00-00" />
+                        <label className="lk-label">Email</label>
+                        <input className="lk-input" value={editProfile.email} onChange={e => setEditProfile({ ...editProfile, email: e.target.value })} placeholder="email@example.com" />
                       </div>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium mb-1.5" style={{ color: "hsl(220 10% 55%)" }}>Email</label>
-                      <input className="input-dark" value={editProfile.email} onChange={e => setEditProfile({ ...editProfile, email: e.target.value })} placeholder="email@example.com" />
-                    </div>
-                    <div className="pt-1">
-                      <button onClick={handleSaveProfile} className="btn-orange px-5 py-2.5 rounded-lg text-sm font-semibold">
+                      {savedProfile && (
+                        <div className="lk-success-msg animate-fade-in">
+                          <Icon name="CheckCircle2" size={15} />
+                          Данные успешно сохранены
+                        </div>
+                      )}
+                      <button onClick={handleSaveProfile} className="lk-btn-primary">
                         Сохранить изменения
                       </button>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {profileTab === "password" && (
-                  <div className="space-y-4 animate-fade-in">
-                    <div>
-                      <label className="block text-xs font-medium mb-1.5" style={{ color: "hsl(220 10% 55%)" }}>Текущий пароль</label>
-                      <input className="input-dark" type="password" placeholder="••••••••" />
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {profileTab === "password" && (
+                    <div className="space-y-4 animate-fade-in">
                       <div>
-                        <label className="block text-xs font-medium mb-1.5" style={{ color: "hsl(220 10% 55%)" }}>Новый пароль</label>
-                        <input className="input-dark" type="password" placeholder="Минимум 8 символов" />
+                        <label className="lk-label">Текущий пароль</label>
+                        <input className="lk-input" type="password" placeholder="Введите текущий пароль" />
                       </div>
-                      <div>
-                        <label className="block text-xs font-medium mb-1.5" style={{ color: "hsl(220 10% 55%)" }}>Повторите пароль</label>
-                        <input className="input-dark" type="password" placeholder="••••••••" />
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="lk-label">Новый пароль</label>
+                          <input className="lk-input" type="password" placeholder="Минимум 8 символов" />
+                        </div>
+                        <div>
+                          <label className="lk-label">Повторите пароль</label>
+                          <input className="lk-input" type="password" placeholder="Повторите пароль" />
+                        </div>
+                      </div>
+                      {showPasswordSuccess && (
+                        <div className="lk-success-msg animate-fade-in">
+                          <Icon name="CheckCircle2" size={15} />
+                          Пароль успешно изменён
+                        </div>
+                      )}
+                      <div className="flex items-center gap-3">
+                        <button onClick={handleSavePassword} className="lk-btn-primary">
+                          Изменить пароль
+                        </button>
+                        <p className="text-xs text-gray-400">Не менее 8 символов, латиница и цифры</p>
                       </div>
                     </div>
-                    {showPasswordSuccess && (
-                      <div className="flex items-center gap-2 text-sm px-3 py-2 rounded-lg animate-fade-in" style={{ background: "rgba(74, 222, 128, 0.08)", border: "1px solid rgba(74, 222, 128, 0.2)", color: "#4ade80" }}>
-                        <Icon name="CheckCircle" size={15} />
-                        Пароль успешно изменён
-                      </div>
-                    )}
-                    <div className="pt-1">
-                      <button onClick={handleSavePassword} className="btn-orange px-5 py-2.5 rounded-lg text-sm font-semibold">
-                        Изменить пароль
-                      </button>
-                    </div>
-                  </div>
-                )}
+                  )}
+                </div>
+              </div>
+
+              {/* Activity strip */}
+              <div className="lk-card p-4 flex items-center gap-4">
+                <div className="lk-activity-icon">
+                  <Icon name="Activity" size={16} style={{ color: "hsl(28 100% 54%)" }} />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-800">Последний вход</p>
+                  <p className="text-xs text-gray-400">Сегодня в 09:14 · Москва · Chrome / macOS</p>
+                </div>
+                <span className="lk-badge-green">Активен</span>
               </div>
             </div>
           )}
 
-          {/* === SUBSCRIPTION === */}
+          {/* ── SUBSCRIPTION ── */}
           {activeTab === "subscription" && (
-            <div className="space-y-5">
-              <div>
-                <h1 className="text-2xl font-bold">Мои подписки</h1>
-                <p className="text-sm mt-1" style={{ color: "hsl(220 10% 50%)" }}>Управляйте тарифом и настройками оплаты</p>
-              </div>
-
-              <div className="rounded-2xl p-5 animate-pulse-orange" style={{ background: "hsl(0 0% 100%)", border: "1px solid rgba(255,138,0,0.3)", boxShadow: "0 1px 8px rgba(0,0,0,0.05)" }}>
-                <div className="flex items-start justify-between mb-4 flex-wrap gap-3">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{ background: "rgba(255,138,0,0.15)", color: "hsl(28 100% 54%)" }}>
-                        Активен
-                      </span>
-                      <span className="text-xs" style={{ color: "hsl(220 10% 50%)" }}>до 25 апреля 2026</span>
-                    </div>
-                    <h2 className="text-xl font-bold">Профессионал</h2>
-                    <p className="text-sm mt-0.5" style={{ color: "hsl(220 10% 55%)" }}>2 990 ₽ / месяц</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-3xl font-black" style={{ color: "hsl(28 100% 54%)" }}>{daysLeft}</p>
-                    <p className="text-xs" style={{ color: "hsl(220 10% 50%)" }}>дней осталось</p>
-                  </div>
-                </div>
-
-                <div className="mb-4">
-                  <div className="flex justify-between text-xs mb-1.5" style={{ color: "hsl(220 10% 50%)" }}>
-                    <span>Использовано</span>
-                    <span>{totalDays - daysLeft} из {totalDays} дней</span>
-                  </div>
-                  <div className="w-full h-2 rounded-full" style={{ background: "hsl(220 15% 90%)" }}>
-                    <div className="progress-bar-orange h-2" style={{ width: `${progress}%` }} />
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-2.5 rounded-lg px-3.5 py-2.5 mb-4" style={{ background: "rgba(255,138,0,0.07)", border: "1px solid rgba(255,138,0,0.15)" }}>
-                  <Icon name="Bell" size={14} className="mt-0.5 shrink-0" style={{ color: "hsl(28 100% 54%)" }} />
-                  <p className="text-xs leading-relaxed" style={{ color: "hsl(220 15% 35%)" }}>
-                    Уведомление о продлении отправлено на <strong>{profile.email}</strong>. Автопродление включено.
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap gap-2">
-                  <button className="btn-orange px-4 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-1.5">
-                    <Icon name="RefreshCw" size={14} />
-                    Продлить подписку
-                  </button>
-                  <button className="px-4 py-2.5 rounded-lg text-sm font-medium transition-all hover:bg-black/5 flex items-center gap-1.5" style={{ border: "1px solid hsl(220 15% 82%)", color: "hsl(220 25% 25%)" }}>
-                    <Icon name="ArrowUpDown" size={14} />
-                    Сменить тариф
-                  </button>
-                  <button className="px-4 py-2.5 rounded-lg text-sm font-medium transition-all hover:bg-black/5 flex items-center gap-1.5" style={{ border: "1px solid hsl(220 15% 82%)", color: "hsl(220 12% 50%)" }}>
-                    <Icon name="Settings" size={14} />
-                    Управление
-                  </button>
+            <div className="animate-fade-in space-y-4">
+              <div className="lk-page-header">
+                <div>
+                  <h1 className="lk-h1">Подписки</h1>
+                  <p className="lk-sub">Управление тарифом и оплатой</p>
                 </div>
               </div>
 
-              <div className="rounded-2xl p-5" style={{ background: "hsl(0 0% 100%)", border: "1px solid hsl(220 15% 88%)", boxShadow: "0 1px 8px rgba(0,0,0,0.05)" }}>
-                <h3 className="font-semibold mb-4 text-sm uppercase tracking-wider" style={{ color: "hsl(220 12% 55%)" }}>Возможности тарифа</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {FEATURES.map((f, i) => (
-                    <div key={i} className="flex items-center gap-2.5 p-3 rounded-xl transition-all hover:bg-orange-50/60" style={{ background: "hsl(220 20% 98%)", border: "1px solid hsl(220 15% 91%)" }}>
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: "rgba(255,138,0,0.1)" }}>
-                        <Icon name={f.icon} size={15} style={{ color: "hsl(28 100% 54%)" }} />
+              {/* Main plan card */}
+              <div className="lk-plan-card">
+                <div className="lk-plan-card-inner">
+                  <div className="flex items-start justify-between gap-4 flex-wrap">
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="lk-plan-badge">● Активен</span>
+                        <span className="text-xs text-gray-400">до 25 апреля 2026</span>
                       </div>
-                      <span className="text-sm font-medium">{f.label}</span>
+                      <h2 className="text-2xl font-black text-gray-900 tracking-tight">Профессионал</h2>
+                      <p className="text-gray-400 text-sm mt-1">2 990 ₽ / месяц · автопродление включено</p>
+                    </div>
+                    <div className="lk-days-counter">
+                      <span className="lk-days-num">{daysLeft}</span>
+                      <span className="lk-days-label">дней</span>
+                    </div>
+                  </div>
+
+                  {/* Progress */}
+                  <div className="mt-5">
+                    <div className="flex justify-between text-xs text-gray-400 mb-2">
+                      <span>Использовано {totalDays - daysLeft} дней</span>
+                      <span>{daysLeft} осталось</span>
+                    </div>
+                    <div className="lk-progress-track-lg">
+                      <div className="lk-progress-fill-lg" style={{ width: `${progress}%` }} />
+                    </div>
+                  </div>
+
+                  {/* Notification hint */}
+                  <div className="mt-4 flex items-start gap-2.5 lk-hint-block">
+                    <Icon name="BellRing" size={14} className="mt-0.5 shrink-0" style={{ color: "hsl(28 100% 54%)" }} />
+                    <p className="text-xs text-gray-500 leading-relaxed">
+                      Уведомление о продлении отправлено на <strong className="text-gray-700">{profile.email}</strong>
+                    </p>
+                  </div>
+
+                  {/* Buttons */}
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    <button className="lk-btn-primary flex items-center gap-2">
+                      <Icon name="RefreshCw" size={14} />
+                      Продлить
+                    </button>
+                    <button className="lk-btn-secondary flex items-center gap-2">
+                      <Icon name="Repeat2" size={14} />
+                      Сменить тариф
+                    </button>
+                    <button className="lk-btn-ghost flex items-center gap-2">
+                      <Icon name="Settings2" size={14} />
+                      Управление
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Features */}
+              <div className="lk-card p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-sm font-semibold text-gray-900">Включено в тариф</h3>
+                  <span className="text-xs text-gray-400">6 возможностей</span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {FEATURES.map((f, i) => (
+                    <div key={i} className="lk-feature-item">
+                      <div className="lk-feature-icon">
+                        <Icon name={f.icon} size={14} style={{ color: "hsl(28 100% 54%)" }} />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-800">{f.label}</p>
+                        <p className="text-xs text-gray-400">{f.desc}</p>
+                      </div>
+                      <Icon name="Check" size={13} className="ml-auto shrink-0" style={{ color: "#22c55e" }} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Payment history */}
+              <div className="lk-card p-5">
+                <h3 className="text-sm font-semibold text-gray-900 mb-3">История платежей</h3>
+                <div className="space-y-2">
+                  {[
+                    { date: "1 апр 2026", amount: "2 990 ₽", status: "Успешно" },
+                    { date: "1 мар 2026", amount: "2 990 ₽", status: "Успешно" },
+                    { date: "1 фев 2026", amount: "2 990 ₽", status: "Успешно" },
+                  ].map((p, i) => (
+                    <div key={i} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+                      <div className="flex items-center gap-3">
+                        <div className="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center">
+                          <Icon name="Receipt" size={12} style={{ color: "#22c55e" }} />
+                        </div>
+                        <span className="text-sm text-gray-600">{p.date}</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm font-semibold text-gray-900">{p.amount}</span>
+                        <span className="lk-badge-green">{p.status}</span>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -339,73 +426,102 @@ export default function Index() {
             </div>
           )}
 
-          {/* === SUPPORT === */}
+          {/* ── SUPPORT ── */}
           {activeTab === "support" && (
-            <div className="space-y-5">
-              <div>
-                <h1 className="text-2xl font-bold">Поддержка</h1>
-                <p className="text-sm mt-1" style={{ color: "hsl(220 10% 50%)" }}>Мы отвечаем в течение 2–4 часов в рабочее время</p>
+            <div className="animate-fade-in space-y-4">
+              <div className="lk-page-header">
+                <div>
+                  <h1 className="lk-h1">Поддержка</h1>
+                  <p className="lk-sub">Отвечаем в течение 2–4 часов в рабочее время</p>
+                </div>
+                <div className="lk-badge-online">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                  Онлайн
+                </div>
               </div>
 
-              <div className="rounded-2xl p-5" style={{ background: "hsl(0 0% 100%)", border: "1px solid hsl(220 15% 88%)", boxShadow: "0 1px 8px rgba(0,0,0,0.05)" }}>
-                <div className="flex items-center gap-2 mb-4">
-                  <Icon name="MessageSquare" size={18} style={{ color: "hsl(28 100% 54%)" }} />
-                  <h3 className="font-semibold">Написать сообщение</h3>
+              {/* Contact cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {[
+                  { icon: "MessageCircle", label: "Telegram", desc: "Быстрый ответ", handle: "@support_team", color: "#2AABEE", bg: "#EFF9FF" },
+                  { icon: "Mail", label: "Email", desc: "Подробные запросы", handle: "support@company.ru", color: "hsl(28 100% 54%)", bg: "#FFF7ED" },
+                ].map((c, i) => (
+                  <div key={i} className="lk-contact-card group">
+                    <div className="lk-contact-icon" style={{ background: c.bg }}>
+                      <Icon name={c.icon} size={20} style={{ color: c.color }} />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <p className="font-semibold text-sm text-gray-900">{c.label}</p>
+                        <span className="text-xs text-gray-400">{c.desc}</span>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-0.5">{c.handle}</p>
+                    </div>
+                    <Icon name="ArrowUpRight" size={14} className="text-gray-300 group-hover:text-orange-400 transition-colors" />
+                  </div>
+                ))}
+              </div>
+
+              {/* Message form */}
+              <div className="lk-card p-5">
+                <div className="flex items-center gap-2.5 mb-4">
+                  <div className="lk-activity-icon">
+                    <Icon name="Pen" size={14} style={{ color: "hsl(28 100% 54%)" }} />
+                  </div>
+                  <h3 className="font-semibold text-gray-900">Новое обращение</h3>
                 </div>
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-xs font-medium mb-1.5" style={{ color: "hsl(220 10% 55%)" }}>Тема обращения</label>
-                    <input className="input-dark" placeholder="Кратко опишите проблему..." />
+                    <label className="lk-label">Тема</label>
+                    <input className="lk-input" placeholder="Кратко опишите проблему..." />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium mb-1.5" style={{ color: "hsl(220 10% 55%)" }}>Сообщение</label>
-                    <textarea className="input-dark" placeholder="Подробно опишите ситуацию..." value={message} onChange={e => setMessage(e.target.value)} />
+                    <label className="lk-label">Сообщение</label>
+                    <textarea className="lk-input lk-textarea" placeholder="Подробно опишите ситуацию..." value={message} onChange={e => setMessage(e.target.value)} />
                   </div>
                   {messageSent && (
-                    <div className="flex items-center gap-2 text-sm px-3 py-2.5 rounded-lg animate-fade-in" style={{ background: "rgba(74, 222, 128, 0.08)", border: "1px solid rgba(74, 222, 128, 0.2)", color: "#4ade80" }}>
-                      <Icon name="CheckCircle" size={15} />
-                      Сообщение отправлено! Мы ответим на {profile.email}
+                    <div className="lk-success-msg animate-fade-in">
+                      <Icon name="CheckCircle2" size={15} />
+                      Отправлено! Ответим на {profile.email}
                     </div>
                   )}
-                  <button onClick={handleSendMessage} className="btn-orange px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2">
-                    <Icon name="Send" size={14} />
+                  <button onClick={handleSendMessage} className="lk-btn-primary flex items-center gap-2">
+                    <Icon name="SendHorizonal" size={14} />
                     Отправить
                   </button>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {[
-                  { icon: "MessageCircle", label: "Telegram", desc: "@support_team", color: "#2AABEE" },
-                  { icon: "Mail", label: "Email", desc: "support@example.com", color: "hsl(28 100% 54%)" },
-                ].map((c, i) => (
-                  <div key={i} className="rounded-xl p-4 flex items-center gap-3 cursor-pointer transition-all hover:bg-gray-50" style={{ background: "hsl(0 0% 100%)", border: "1px solid hsl(220 15% 88%)", boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${c.color}18` }}>
-                      <Icon name={c.icon} size={18} style={{ color: c.color }} />
-                    </div>
-                    <div>
-                      <p className="font-medium text-sm">{c.label}</p>
-                      <p className="text-xs" style={{ color: "hsl(220 10% 50%)" }}>{c.desc}</p>
-                    </div>
-                    <Icon name="ChevronRight" size={14} className="ml-auto" style={{ color: "hsl(220 15% 70%)" }} />
+              {/* FAQ */}
+              <div className="lk-card p-5">
+                <div className="flex items-center gap-2.5 mb-4">
+                  <div className="lk-activity-icon">
+                    <Icon name="HelpCircle" size={14} style={{ color: "hsl(28 100% 54%)" }} />
                   </div>
-                ))}
-              </div>
-
-              <div className="rounded-2xl p-5" style={{ background: "hsl(0 0% 100%)", border: "1px solid hsl(220 15% 88%)", boxShadow: "0 1px 8px rgba(0,0,0,0.05)" }}>
-                <div className="flex items-center gap-2 mb-4">
-                  <Icon name="HelpCircle" size={18} style={{ color: "hsl(28 100% 54%)" }} />
-                  <h3 className="font-semibold">Часто задаваемые вопросы</h3>
+                  <h3 className="font-semibold text-gray-900">Частые вопросы</h3>
                 </div>
-                <div>
+                <div className="divide-y divide-gray-50">
                   {FAQS.map((item, i) => (
-                    <div key={i} className="faq-item">
-                      <button className="w-full flex items-center justify-between py-3.5 px-1 text-left" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
-                        <span className="text-sm font-medium pr-4">{item.q}</span>
-                        <Icon name="ChevronDown" size={15} className="shrink-0 transition-transform duration-200" style={{ color: "hsl(220 10% 50%)", transform: openFaq === i ? "rotate(180deg)" : "rotate(0deg)" }} />
+                    <div key={i}>
+                      <button
+                        className="w-full flex items-center justify-between py-3.5 text-left group"
+                        onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                      >
+                        <span className={`text-sm font-medium pr-4 transition-colors ${openFaq === i ? "text-orange-500" : "text-gray-700 group-hover:text-gray-900"}`}>{item.q}</span>
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all ${openFaq === i ? "bg-orange-100" : "bg-gray-100"}`}>
+                          <Icon
+                            name="ChevronDown"
+                            size={13}
+                            style={{
+                              color: openFaq === i ? "hsl(28 100% 54%)" : "#9ca3af",
+                              transform: openFaq === i ? "rotate(180deg)" : "rotate(0deg)",
+                              transition: "transform 0.2s"
+                            }}
+                          />
+                        </div>
                       </button>
                       {openFaq === i && (
-                        <p className="px-1 pb-3.5 text-sm leading-relaxed animate-fade-in" style={{ color: "hsl(220 10% 58%)" }}>
+                        <p className="pb-3.5 text-sm text-gray-500 leading-relaxed animate-fade-in pr-8">
                           {item.a}
                         </p>
                       )}
@@ -415,6 +531,7 @@ export default function Index() {
               </div>
             </div>
           )}
+
         </main>
       </div>
     </div>
