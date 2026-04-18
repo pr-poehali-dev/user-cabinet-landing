@@ -11,12 +11,12 @@ const NOTIFICATIONS = [
 ];
 
 const FEATURES = [
-  { icon: "Zap", label: "До 50 проектов", desc: "Без ограничений по типу" },
-  { icon: "Globe", label: "Свой домен", desc: "Любой домен бесплатно" },
-  { icon: "Shield", label: "SSL-сертификат", desc: "Автовыпуск и продление" },
-  { icon: "Database", label: "10 ГБ хранилища", desc: "Файлы и медиа" },
-  { icon: "Users", label: "3 участника", desc: "Совместная работа" },
-  { icon: "BarChart2", label: "Аналитика", desc: "Полная статистика" },
+  { icon: "Zap", label: "До 50 проектов", desc: "Без ограничений по типу", color: "hsl(28 100% 52%)" },
+  { icon: "Globe", label: "Свой домен", desc: "Любой домен бесплатно", color: "#3b82f6" },
+  { icon: "Shield", label: "SSL-сертификат", desc: "Автовыпуск и продление", color: "#22c55e" },
+  { icon: "Database", label: "10 ГБ хранилища", desc: "Файлы и медиа", color: "#a855f7" },
+  { icon: "Users", label: "3 участника", desc: "Совместная работа", color: "#ec4899" },
+  { icon: "BarChart2", label: "Аналитика", desc: "Полная статистика", color: "#14b8a6" },
 ];
 
 const FAQS = [
@@ -386,8 +386,8 @@ export default function Index() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {FEATURES.map((f, i) => (
                     <div key={i} className="lk-feature-item">
-                      <div className="lk-feature-icon">
-                        <Icon name={f.icon} size={14} style={{ color: "hsl(28 100% 54%)" }} />
+                      <div className="lk-feature-icon" style={{ background: `${f.color}18` }}>
+                        <Icon name={f.icon} size={14} style={{ color: f.color }} />
                       </div>
                       <div>
                         <p className="text-sm font-medium text-gray-800">{f.label}</p>
